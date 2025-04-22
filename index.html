@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>MY SLA Calculator</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
+      .centerContainer {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .wrapper {
+        width: 660px;
+        float: left;
+      }
+
+      form,
+      h2 {
+        width: 100%;
+        float: left;
+      }
+      input[type="number"],
+      input[type="date"],
+      input[type="text"] {
+        padding: 15px 20px;
+        margin: 5px 0;
+        width: 100%;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+      }
+
+      input:focus {
+        border: 1px solid #000;
+        outline: none;
+      }
+
+      label {
+        display: block;
+        margin-top: 20px;
+      }
+      label span {
+        display: block;
+        width: 250px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="centerContainer">
+      <div class="wrapper">
+        <h2>SLA Calculator</h2>
+        <form id="journeyForm">
+          <label>
+            <span>Email Count:</span>
+            <input type="number" id="email" min="0" />
+          </label>
+          <label>
+            <span>SMS Count:</span>
+            <input type="number" id="sms" min="0" />
+          </label>
+
+          <label>
+            <span>End Count:</span>
+            <input type="date" id="endDate" />
+          </label>
+
+          <label>
+            <span>Medium Journey Time (Hours):</span>
+            <input type="text" value="17" id="mediumJourney" disabled />
+          </label>
+
+          <label>
+            <span>Conversion CM Time (Hours):</span>
+            <input type="text" value="16" id="conversionCM" disabled />
+          </label>
+
+          <label>
+            <span>Total Hours:</span>
+            <input type="text" id="totalHours" disabled />
+          </label>
+
+          <label>
+            <span>Total Days:</span>
+            <input type="text" id="totalDays" disabled />
+          </label>
+
+          <label>
+            <span>Calculated Start Date:</span>
+            <input type="text" id="startDate" disabled />
+          </label>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      function isWeekend(date) {
+        return date.getDay() === 0 || date.getDay() === 6;
+      }
+
+      function subtractBusinessHours(endDate, hoursToSubtract) {
+        const WORK_HOURS_PER_DAY = 8;
+        let date = new Date(endDate);
+        let totalDays = Math.ceil(hoursToSubtract / WORK_HOURS_PER_DAY);
+
+        while (totalDays > 0) {
+          date.setDate(date.getDate() - 1);
+          if (!isWeekend(date)) {
+            totalDays--;
+          }
+        }
+        return date;
+      }
+
+      function updateStartDate() {
+        const sms = parseInt(document.getElementById("sms").value) || 0;
+        const email = parseInt(document.getElementById("email").value) || 0;
+        const endDateStr = document.getElementById("endDate").value;
+        if (!endDateStr) return;
+
+        const endDate = new Date(endDateStr);
+        endDate.setHours(23, 59, 59, 999);
+
+        const emailHours = email * 6;
+        const smsHours = sms * 1;
+        const mediumJourneyHours = 17;
+        const conversionHours = 16;
+
+        const totalHours = emailHours + smsHours + mediumJourneyHours + conversionHours;
+        document.getElementById("totalHours").value = totalHours;
+        const startDate = subtractBusinessHours(endDate, totalHours);
+        document.getElementById("totalDays").value = totalHours / 8;
+        document.getElementById("startDate").value = startDate.toLocaleDateString();
+      }
+
+      document.getElementById("sms").addEventListener("input", updateStartDate);
+      document.getElementById("email").addEventListener("input", updateStartDate);
+      document.getElementById("endDate").addEventListener("change", updateStartDate);
+    </script>
+  </body>
+</html>
