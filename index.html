@@ -49,6 +49,10 @@
         display: block;
         width: 250px;
       }
+
+      .hideField{
+        display:none !important;
+      }
     </style>
   </head>
   <body>
@@ -70,22 +74,22 @@
             <input type="date" id="endDate" />
           </label>
 
-          <label>
+          <label class="hideField">
             <span>Medium Journey Time (Hours):</span>
             <input type="text" value="17" id="mediumJourney" disabled />
           </label>
 
-          <label>
+          <label class="hideField">
             <span>CM Conversion Time (Hours):</span>
             <input type="text" value="16" id="conversionCM" disabled />
           </label>
 
-          <label>
+          <label class="hideField">
             <span>Total Hours:</span>
             <input type="text" id="totalHours" disabled />
           </label>
 
-          <label>
+          <label class="hideField">
             <span>Total Days:</span>
             <input type="text" id="totalDays" disabled />
           </label>
