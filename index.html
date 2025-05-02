@@ -50,8 +50,8 @@
         width: 250px;
       }
 
-      .hideField{
-        display:none !important;
+      .hideField {
+        display: none !important;
       }
     </style>
   </head>
@@ -103,6 +103,7 @@
     </div>
 
     <script>
+      const options = { day: "2-digit", month: "short" };
       function isWeekend(date) {
         return date.getDay() === 0 || date.getDay() === 6;
       }
@@ -139,7 +140,7 @@
         document.getElementById("totalHours").value = totalHours;
         const startDate = subtractBusinessHours(endDate, totalHours);
         document.getElementById("totalDays").value = totalHours / 8;
-        document.getElementById("startDate").value = startDate.toLocaleDateString();
+        document.getElementById("startDate").value = startDate.toLocaleDateString("en-GB", options);
       }
 
       document.getElementById("sms").addEventListener("input", updateStartDate);
